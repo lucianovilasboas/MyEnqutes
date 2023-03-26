@@ -132,6 +132,10 @@
       });
     });
 
+    socket.on('admin_sortudos_finalizou', ()=>{
+      bootbox.alert("Todos já foram sorteados.");
+    });
+
     document.querySelector('button#btReabrirEnquete').addEventListener('click', evt => {
       evt.preventDefault();
       bootbox.confirm("Deseja realmente reabrir a enquete?", (confirm) => {

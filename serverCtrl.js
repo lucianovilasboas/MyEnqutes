@@ -11,7 +11,7 @@ module.exports = function (server) {
     //     sessionMiddleware(socket.request, socket.request.res, next);
     // });    
 
-    const questionsRepo = require('./questions'); 
+    const questionsRepo = require('./questions');
 
     // var questions = questionsRepo.getAll();
 
@@ -48,7 +48,7 @@ module.exports = function (server) {
                 socket.on('enviar_pergunta', qId => {
                     io.emit('admin_users', users);
                     let q = questionsRepo.getById(qId);
-                    questionsRepo.updateOne(q, "status", true); 
+                    questionsRepo.updateOne(q, "status", true);
                     console.log("<<== update finish.");
                     io.emit('user_pergunta', q);
                     io.emit('admin_perguntas', questionsRepo.getAll());
@@ -86,11 +86,15 @@ module.exports = function (server) {
 
                 socket.on('admin_sortear', () => {
                     user = userSortear();
-                    console.log(user);
-                    // io.sockets.socket(user.id).emit("user_sortudo", user);
-                    io.emit("user_sortudo", user);
-                    users_sortudos.push(user);
-                    socket.emit('admin_sortudos', users_sortudos);
+                    if (user) {
+                        console.log(user);
+                        // io.sockets.socket(user.id).emit("user_sortudo", user);
+                        io.emit("user_sortudo", user);
+                        users_sortudos.push(user);
+                        socket.emit('admin_sortudos', users_sortudos);
+                    }else{
+                        socket.emit('admin_sortudos_finalizou');
+                    }
                 });
 
                 socket.on('admin_nova_pergunta', qnew => {
@@ -98,7 +102,7 @@ module.exports = function (server) {
                     io.emit('admin_perguntas', questionsRepo.getAll());
                 });
 
-            }else{
+            } else {
                 socket.emit('error_login');
             }
 
@@ -121,8 +125,8 @@ module.exports = function (server) {
 
     function userJoin(id, nome, email, type) {
 
-        let user = { "id": id, "name": nome, "email": email, "type": type, "is_voted": {} };
-        if(type != ADMIN){
+        let user = { "id": id, "name": nome, "email": email, "type": type, "is_voted": {}, 'is_sort': false };
+        if (type != ADMIN) {
             users.push(user);
         }
 
@@ -148,12 +152,34 @@ module.exports = function (server) {
         let usersCopy = [];
 
         for (i = 0; i < users.length; i++) {
-            if (users[i].type != ADMIN)
+            if (users[i].type != ADMIN && !users[i].is_sort)
                 usersCopy.push(users[i]);
         }
 
-        let randomIndex = parseInt(Math.random() * usersCopy.length);
-        return usersCopy[randomIndex];
+        if (usersCopy.length > 0) {
+            let randomIndex = parseInt(Math.random() * usersCopy.length);
+            usersCopy[randomIndex].is_sort = true;
+            return usersCopy[randomIndex];
+        }
+        return null;
+    }
+
+    // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    function shuffle(array) {
+        let currentIndex = array.length, randomIndex;
+
+        // While there remain elements to shuffle.
+        while (currentIndex != 0) {
+
+            // Pick a remaining element.
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+
+        return array;
     }
 
 };
