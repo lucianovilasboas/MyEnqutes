@@ -1,0 +1,147 @@
+[
+ {
+  "id": 0,
+  "status": true,
+  "q": "O que vc está achando dessa aula?",
+  "options": [
+   {
+    "i": "Ruim"
+   },
+   {
+    "i": "Boa"
+   },
+   {
+    "i": "Péssima"
+   }
+  ],
+  "votes": {
+   "Ruim": 1,
+   "Boa": 1
+  },
+  "users": [
+   "bernardo.espiridiao@gmail.com",
+   "isabella.espiridiao@gmail.com"
+  ]
+ },
+ {
+  "id": 1,
+  "status": true,
+  "q": "Sua altura é...",
+  "options": [
+   {
+    "i": "maior que 1,5m"
+   },
+   {
+    "i": "menor que 1,5m"
+   }
+  ],
+  "votes": {
+   "maior que 1,5m": 2
+  },
+  "users": [
+   "bernardo.espiridiao@gmail.com",
+   "isabella.espiridiao@gmail.com"
+  ]
+ },
+ {
+  "id": 2,
+  "status": true,
+  "q": "Qual a sua cor favorita?",
+  "options": [
+   {
+    "i": "vermelho"
+   },
+   {
+    "i": "verde"
+   },
+   {
+    "i": "azul"
+   }
+  ],
+  "votes": {
+   "vermelho": 1,
+   "verde": 1
+  },
+  "users": [
+   "bernardo.espiridiao@gmail.com",
+   "isabella.espiridiao@gmail.com"
+  ]
+ },
+ {
+  "q": "Qual a cor do cavalo branco de Napoleão?",
+  "options": [
+   {
+    "i": "Azul"
+   },
+   {
+    "i": "Verde"
+   },
+   {
+    "i": "Branco"
+   }
+  ],
+  "id": 3,
+  "status": true,
+  "votes": {
+   "Branco": 1,
+   "Verde": 1
+  },
+  "users": [
+   "bernardo.espiridiao@gmail.com",
+   "isabella.espiridiao@gmail.com"
+  ]
+ },
+ {
+  "q": "Test",
+  "options": [
+   {
+    "i": "A"
+   },
+   {
+    "i": "B"
+   },
+   {
+    "i": "C"
+   },
+   {
+    "i": "D"
+   },
+   {
+    "i": "E"
+   }
+  ],
+  "id": 4,
+  "status": true,
+  "votes": {
+   "E": 1,
+   "C": 1
+  },
+  "users": [
+   "bernardo.espiridiao@gmail.com",
+   "isabella.espiridiao@gmail.com"
+  ]
+ },
+ {
+  "q": "3 é par?",
+  "options": [
+   {
+    "i": "Sim"
+   },
+   {
+    "i": "Não"
+   },
+   {
+    "i": "Não sei"
+   }
+  ],
+  "id": 5,
+  "status": true,
+  "votes": {
+   "Não sei": 2
+  },
+  "users": [
+   "isabella.espiridiao@gmail.com",
+   "bernardo.espiridiao@gmail.com"
+  ]
+ }
+]
