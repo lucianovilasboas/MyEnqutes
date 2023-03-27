@@ -20,31 +20,41 @@
 
 <body>
   <div class="container">
-    <h1>
+
+    <h1 class="text-center">
       <%= title %>
     </h1>
 
 
-    <h2 class="text-center">Perguntas
-      <br>
-      <div  class="btn-group btn-group-sm" >
-      <button id="btNovaEnquete" class="btn btn-sm btn-success">Nova pergunta</button>
-      <button id="btReabrirEnquete" class="btn btn-sm btn-danger">Reabrir enquete</button>
-      <button id="btSortear" class="btn btn-sm btn-primary">Sortear</button>
+    <div class="row text-center">
+      <div class="col-12">
+        <div class="btn-group btn-group-sm">
+          <button id="btNovaEnquete" class="btn btn-sm btn-success">Nova pergunta</button>
+          <button id="btReabrirEnquete" class="btn btn-sm btn-danger">Reabrir enquete</button>
+          <button id="btSortear" class="btn btn-sm btn-primary">Sortear Figurinha</button>
+        </div>
       </div>
-    </h2>
-    <div class="list-group" id="perguntas"></div>
-
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <div class="list-group" id="perguntas"></div>
+      </div>
+    </div>
     <hr>
-    <h5>Usuários conectados</h5>
-    <ul class="list-group" id="users"></ul>
-
+    <div class="row">
+      <div class="col-12">
+        <h5>Usuários conectados</h5>
+        <ul class="list-group" id="users"></ul>
+      </div>
+    </div>
     <hr>
-    <h5>Usuários sorteados</h5>
-    <ul class="list-group" id="usersSortudos"></ul>
-
-    <!-- <p>Respostas</p>
-  <ul id="respostas"></ul> -->
+    <div class="row">
+      <div class="col-12">
+        <h5>Usuários sorteados</h5>
+        <ul class="list-group" id="usersSortudos"></ul>
+      </div>
+    </div>
 
   </div>
 
@@ -72,7 +82,8 @@
           // ul.innerHTML += `<li class="list-group-item" > <i class="fas fa-user ${user.online ? "c-green" : "c-red" }"></i> ${user.name} [${user.email}]</li>`;
 
           if (user.online) {
-            ul.innerHTML += `<li class="list-group-item" > <i class="fas fa-user c-green"></i> ${user.name} [${user.email}]</li>`;
+            let figurinha =  user.is_sort ? '<i class="fas fa-smile c-green"></i>' : '';
+            ul.innerHTML += `<li class="list-group-item" > <i class="fas fa-user c-green"></i> ${user.name} [${user.email}] ${figurinha}</li>`;
           }
 
 
@@ -185,20 +196,20 @@
       evt.preventDefault();
 
       bootbox.prompt({
-        title: '<small>Escreva a pergunta no formato:<br>Pergunta<br>opcao1<br>opcao2<br>...</small>',
+        title: 'Escreva a questão no formato: <small>Pergunta|opcao1|opcao2|...</small>',
         inputType: 'textarea',
 
         callback: function (text) {
           console.log(text);
           if (text) {
-            let qtext = text.split('\n');
+            let qtext = text.split('|');
             let options = [];
             for (let i = 1; i < qtext.length; i++) {
               let qtext_ = qtext[i].trim();
-              if(qtext_)
+              if (qtext_)
                 options.push({ "i": qtext_ });
             }
-            socket.emit('admin_nova_pergunta', { "q": qtext[0], options});
+            socket.emit('admin_nova_pergunta', { "q": qtext[0], options });
           }
         }
 

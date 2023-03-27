@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const fileName = "./data/questions.json";
 
-let questions = JSON.parse(fs.readFileSync(fileName)); 
+let questions = JSON.parse(fs.readFileSync(fileName));
 
 module.exports = {
     getAll: () => questions,
@@ -14,7 +14,7 @@ module.exports = {
     remove
 };
 
-function getByStatus( status){
+function getByStatus(status) {
     return questions.filter(q => q.status == status).length > 0;
 }
 
@@ -22,13 +22,13 @@ function create(q) {
     // generate new task id
     q.id = questions.length ? Math.max(...questions.map(x => x.id)) + 1 : 1;
     q.status = false;
-    q.votes = {}; 
+    q.votes = {};
     q.users = [];
 
     // add and save task
     questions.push(q);
     saveData();
-    
+
     return q.id;
 }
 
@@ -37,7 +37,7 @@ function updateAll() {
         q.status = false;
         q.users = [];
         q.votes = {};
-    });    
+    });
     saveData();
 }
 
@@ -46,26 +46,34 @@ function updateAll() {
 function updateOne(q, prop, value) {
     // set date updated
     // q.dateUpdated = new Date().toISOString();
-
-    q[prop] = value;
-    saveData();
+    if (q) {
+        q[prop] = value;
+        saveData();
+    }
 }
 
 function remove(id) {
     // filter out deleted task and save
-    questions = questions.filter(x => x.id.toString() !== id.toString());
-    saveData();
-    
+    if (id) {
+        questions = questions.filter(x => x.id.toString() !== id.toString());
+        saveData();
+    }
+
 }
 
 
 // private helper functions
 
 function saveData() {
-    // console.log("==>>",fileName, 'called');
-    fs.writeFileSync(fileName, JSON.stringify(questions, null, 1));
 
-    
+    try {
+        fs.writeFileSync(fileName, JSON.stringify(questions, null, 1));
+    }
+    catch (err) {
+        console.log(err);
+    }
+
+
     // fs.writeFile(fileName, JSON.stringify(questions, null, 1), (err) => {
     //     if (err) throw err;
     //     console.log("=..=", fileName, 'updated');

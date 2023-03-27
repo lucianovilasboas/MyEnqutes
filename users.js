@@ -34,14 +34,20 @@ function clearAll() {
 
 
 
-function updateOne(user, prop, value) {
-    user[prop] = value;
-    saveData();
+function updateOne(user, keyValueMap) {
+    if (user) {
+        for (const [key, value] of Object.entries(keyValueMap)) {
+            user[key] = value;
+        }
+        saveData();
+    }
 }
 
 function remove(id) {
-    users = users.filter(x => x.id.toString() !== id.toString());
-    saveData();
+    if (id) {
+        users = users.filter(x => x.id.toString() !== id.toString());
+        saveData();
+    }
 
 }
 
@@ -67,7 +73,7 @@ function random() {
 }
 
 
-function sortudos(){
+function sortudos() {
     return users.filter(u => u.is_sort);
 }
 
@@ -93,5 +99,11 @@ function shuffle(array) {
 
 // private helper functions
 function saveData() {
-    fs.writeFileSync(fileName, JSON.stringify(users, null, 1));
+    try {
+        fs.writeFileSync(fileName, JSON.stringify(users, null, 1));
+    }
+    catch (err) {
+        console.log(err);
+    }
+
 }

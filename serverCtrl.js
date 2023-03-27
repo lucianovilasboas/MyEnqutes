@@ -79,12 +79,11 @@ module.exports = function (server) {
                     for (let i = 0; i < n; i++) {
                         user = usersRepo.random();
                         if (user) {
-                            // console.log(user);
-                            // io.sockets.socket(user.id).emit("user_sortudo", user);
                             io.emit("user_sortudo", user);
                             socket.emit('admin_sortudos', usersRepo.sortudos());
+                            socket.emit('admin_users', usersRepo.getAll());
                             
-                            usersRepo.updateOne(user, "is_sort", true);
+                            usersRepo.updateOne(user, {"is_sort": true});
                             
                         } else {
                             socket.emit('admin_sortudos_finalizou');
@@ -114,7 +113,7 @@ module.exports = function (server) {
             let user = usersRepo.getById(socket.id);
             if (user) {
                 console.debug("logout", user.id);
-                usersRepo.updateOne(user, "online", false);
+                usersRepo.updateOne(user, {"online": false});
             }
             socket.emit('error_login');
             io.emit('admin_users', usersRepo.getAll());
@@ -124,7 +123,7 @@ module.exports = function (server) {
             let user = usersRepo.getById(socket.id);
             if (user) {
                 console.debug("disconnect", user.id);
-                usersRepo.updateOne(user, "online", false);
+                usersRepo.updateOne(user, {"online": false});
             }
             io.emit('admin_users', usersRepo.getAll());
         });
@@ -142,8 +141,8 @@ module.exports = function (server) {
     function userJoin(id, nome, email, type) {
         let user = usersRepo.getByEmail(email);
         if (user) {
-            usersRepo.updateOne(user, "id", id);
-            usersRepo.updateOne(user, "online", true);
+            // usersRepo.updateOne(user, "id", id);
+            usersRepo.updateOne(user, {"id": id, "online": true});
         } else {
             user = { "id": id, "name": nome, "email": email, "type": type, "is_voted": {}, 'is_sort': false, "online": true };
             usersRepo.create(user);
