@@ -25,10 +25,13 @@
     </h1>
 
 
-    <h2>Perguntas
+    <h2 class="text-center">Perguntas
+      <br>
+      <div  class="btn-group btn-group-sm" >
       <button id="btNovaEnquete" class="btn btn-sm btn-success">Nova pergunta</button>
       <button id="btReabrirEnquete" class="btn btn-sm btn-danger">Reabrir enquete</button>
       <button id="btSortear" class="btn btn-sm btn-primary">Sortear</button>
+      </div>
     </h2>
     <div class="list-group" id="perguntas"></div>
 
@@ -104,9 +107,9 @@
                             <p class="mb-1"><b>Opções</b>: ${opt}</p>
                             <p class="mb-1"><b>Respostas</b>: [${votes}]</p>
                             <p class="mb-1">
-                              <button class="btn btn-sm btn-primary" data-pergunta="${quest.id}" style="display: ${display};" >Enviar</button>
+                              <button class="btn btn-sm btn-primary" data-pergunta="${quest.id}" style="display: ${display};" >Enviar </button>
                           
-                              <button class="btn btn-sm btn-danger float-right" data-pergunta="${quest.id}" >Excluir</button>
+                              <button class="btn btn-sm btn-danger float-right" data-pergunta="${quest.id}" ><i class="fas fa-trash" aria-hidden="true"></i></button>
                             </p>
                           </div>`;
 

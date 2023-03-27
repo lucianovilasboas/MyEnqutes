@@ -1,12 +1,12 @@
 [
  {
-  "id": "DeFVBeJn61-yitmFAAAh",
+  "id": "zmS4CWe1ffj0eVZXAAAZ",
   "name": "Bernardo",
   "email": "bernardo.espiridiao@gmail.com",
   "type": "user",
   "is_voted": {},
-  "is_sort": true,
-  "online": false
+  "is_sort": false,
+  "online": true
  },
  {
   "id": "1GbtNz03RsV0evYHAAAZ",
@@ -36,7 +36,7 @@
   "online": false
  },
  {
-  "id": "mj9m6egFYropJVvwAAAH",
+  "id": "WBfOSc9i8U4iEdd-AAAb",
   "name": "Luciano",
   "email": "lucianovilasboas@gmail.com",
   "type": "admin",

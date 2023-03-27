@@ -1,7 +1,7 @@
 [
  {
   "id": 2,
-  "status": true,
+  "status": false,
   "q": "Qual a sua cor favorita?",
   "options": [
    {
@@ -14,15 +14,8 @@
     "i": "azul"
    }
   ],
-  "votes": {
-   "verde": 2,
-   "azul": 1
-  },
-  "users": [
-   "bernardo.espiridiao@gmail.com",
-   "luciano.espiridiao@ifmg.edu.br",
-   "isabella.espiridiao@gmail.com"
-  ]
+  "votes": {},
+  "users": []
  },
  {
   "q": "Qual a cor do cavalo branco de Napoleão?",
@@ -38,15 +31,8 @@
    }
   ],
   "id": 3,
-  "status": true,
-  "votes": {
-   "Verde": 2,
-   "Branco": 1
-  },
-  "users": [
-   "bernardo.espiridiao@gmail.com",
-   "luciano.espiridiao@ifmg.edu.br",
-   "isabella.espiridiao@gmail.com"
-  ]
+  "status": false,
+  "votes": {},
+  "users": []
  }
 ]
