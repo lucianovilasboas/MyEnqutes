@@ -23,13 +23,19 @@
   <div class="container">
     <h1>
       <%= title %>
+      <button id="sair" class="btn btn-sm btn-danger float-right">Sair</button>
     </h1>
 
     <p>Olá <strong>
-        <%= nome %>
-      </strong>. <br><small><i>
+        <%= nome %>.
+      </strong>
+      <br>
+      <small>
+        <i>
           <%= email %>
-        </i></small></p>
+        </i>
+      </small>
+    </p>
 
 
 
@@ -97,27 +103,32 @@
     });
 
 
-    function createItemQuestion(q){
-        let li = document.createElement('li');
-        li.classList.add('list-group-item');
+    function createItemQuestion(q) {
+      let li = document.createElement('li');
+      li.classList.add('list-group-item');
 
-        let opt = "";
-        q.options.forEach(o => {
-          opt += `<button class="btn btn-sm btn-danger" data-pergunta="${q.id}" >${o.i}</button> `;
-        });
-        li.innerHTML = `${q.q} <br> ${opt}`;
-        output.appendChild(li);
+      let opt = "";
+      q.options.forEach(o => {
+        opt += `<button class="btn btn-sm btn-success" data-pergunta="${q.id}" >${o.i}</button> `;
+      });
+      li.innerHTML = `${q.q} <br> ${opt}`;
+      output.appendChild(li);
 
-        document.querySelectorAll(`button[data-pergunta="${q.id}"]`).forEach(el => {
-          el.addEventListener('click', evt => {
-            evt.preventDefault();
-            let text = evt.target.innerText;
-            let qId = evt.target.getAttribute('data-pergunta');
-            socket.emit("user_resp", text, qId);
-            el.closest('li').remove();
-          });
+      document.querySelectorAll(`li > button[data-pergunta="${q.id}"]`).forEach(el => {
+        el.addEventListener('click', evt => {
+          evt.preventDefault();
+          let text = evt.target.innerText;
+          let qId = evt.target.getAttribute('data-pergunta');
+          socket.emit("user_resp", text, qId);
+          el.closest('li').remove();
         });
+      });
     }
+
+    document.querySelector("button#sair").addEventListener('click', (evt) => {
+       evt.preventDefault();
+       socket.emit('logout'); 
+    });
 
 
   </script>

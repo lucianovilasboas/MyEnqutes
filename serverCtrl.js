@@ -109,10 +109,21 @@ module.exports = function (server) {
 
         });
 
+
+        socket.on('logout', () => {
+            let user = usersRepo.getById(socket.id);
+            if (user) {
+                console.debug("logout", user.id);
+                usersRepo.updateOne(user, "online", false);
+            }
+            socket.emit('error_login');
+            io.emit('admin_users', usersRepo.getAll());
+        });        
+
         socket.on('disconnect', () => {
             let user = usersRepo.getById(socket.id);
-            // console.log("disconnect", user);
             if (user) {
+                console.debug("disconnect", user.id);
                 usersRepo.updateOne(user, "online", false);
             }
             io.emit('admin_users', usersRepo.getAll());

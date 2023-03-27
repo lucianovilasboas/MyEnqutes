@@ -1,47 +1,56 @@
 [
  {
-  "id": "kaNgcnDyJUuwU1r-AAAf",
+  "id": "DeFVBeJn61-yitmFAAAh",
   "name": "Bernardo",
   "email": "bernardo.espiridiao@gmail.com",
   "type": "user",
   "is_voted": {},
-  "is_sort": false,
-  "online": true
+  "is_sort": true,
+  "online": false
  },
  {
-  "id": "5Mgh4FElnUoYNwQaAAAj",
+  "id": "1GbtNz03RsV0evYHAAAZ",
   "name": "Luciano",
   "email": "luciano.espiridiao@ifmg.edu.br",
   "type": "user",
   "is_voted": {},
   "is_sort": false,
-  "online": true
+  "online": false
  },
  {
-  "id": "-o-6s4D6GUvQMdpkAAAh",
+  "id": "f3gQNMP69gBGtQflAAAf",
   "name": "Isabella",
   "email": "isabella.espiridiao@gmail.com",
   "type": "user",
   "is_voted": {},
   "is_sort": false,
-  "online": true
+  "online": false
  },
  {
-  "id": "xQ8paMoTEEaXUbpmAAAg",
+  "id": "NSjiSUtdLCu7FcaQAAAR",
   "name": "Camila ",
   "email": "CAMILAADRIANA@GMAIL.COM",
   "type": "user",
   "is_voted": {},
   "is_sort": false,
-  "online": true
+  "online": false
  },
  {
-  "id": "ioLdfqvTOOrQ9dyeAAAL",
+  "id": "mj9m6egFYropJVvwAAAH",
   "name": "Luciano",
   "email": "lucianovilasboas@gmail.com",
   "type": "admin",
   "is_voted": {},
   "is_sort": false,
   "online": true
+ },
+ {
+  "id": "kgHOpLo9jug5e7rcAAAb",
+  "name": "Isabella",
+  "email": "luciano.espiridiao@gmail.com",
+  "type": "user",
+  "is_voted": {},
+  "is_sort": false,
+  "online": false
  }
 ]
