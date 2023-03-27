@@ -1,113 +1,38 @@
 [
-    {
-        "id": 0,
-        "status": true,
-        "q": "O que vc está achando dessa aula?",
-        "options": [
-            {
-                "i": "Ruim"
-            },
-            {
-                "i": "Boa"
-            },
-            {
-                "i": "Péssima"
-            }
-        ],
-        "votes": {},
-        "users": []
-    },
-    {
-        "id": 1,
-        "status": true,
-        "q": "Sua altura é...",
-        "options": [
-            {
-                "i": "maior que 1,5m"
-            },
-            {
-                "i": "menor que 1,5m"
-            }
-        ],
-        "votes": {},
-        "users": []
-    },
-    {
-        "id": 2,
-        "status": true,
-        "q": "Qual a sua cor favorita?",
-        "options": [
-            {
-                "i": "vermelho"
-            },
-            {
-                "i": "verde"
-            },
-            {
-                "i": "azul"
-            }
-        ],
-        "votes": {},
-        "users": []
-    },
-    {
-        "q": "Qual a cor do cavalo branco de Napoleão?",
-        "options": [
-            {
-                "i": "Azul"
-            },
-            {
-                "i": "Verde"
-            },
-            {
-                "i": "Branco"
-            }
-        ],
-        "id": 3,
-        "status": true,
-        "votes": {},
-        "users": []
-    },
-    {
-        "q": "Test",
-        "options": [
-            {
-                "i": "A"
-            },
-            {
-                "i": "B"
-            },
-            {
-                "i": "C"
-            },
-            {
-                "i": "D"
-            },
-            {
-                "i": "E"
-            }
-        ],
-        "id": 4,
-        "status": true,
-        "votes": {},
-        "users": []
-    },
-    {
-        "q": "3 é par?",
-        "options": [
-            {
-                "i": "Sim"
-            },
-            {
-                "i": "Não"
-            },
-            {
-                "i": "Não sei"
-            }
-        ],
-        "id": 5,
-        "status": false,
-        "votes": {},
-        "users": []
-    }
+ {
+  "id": 2,
+  "status": false,
+  "q": "Qual a sua cor favorita?",
+  "options": [
+   {
+    "i": "vermelho"
+   },
+   {
+    "i": "verde"
+   },
+   {
+    "i": "azul"
+   }
+  ],
+  "votes": {},
+  "users": []
+ },
+ {
+  "q": "Qual a cor do cavalo branco de Napoleão?",
+  "options": [
+   {
+    "i": "Azul"
+   },
+   {
+    "i": "Verde"
+   },
+   {
+    "i": "Branco"
+   }
+  ],
+  "id": 3,
+  "status": false,
+  "votes": {},
+  "users": []
+ }
 ]

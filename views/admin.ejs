@@ -49,9 +49,9 @@
   <script>
     var socket = io();
 
-    const TYPE = "admin";
+    const ADMIN = "admin";
 
-    socket.emit('login', { "nome": "Luciano", "email": "lucianovilasboas@gmail.com", "type": TYPE });
+    socket.emit('login', { "nome": "Luciano", "email": "lucianovilasboas@gmail.com", "type": ADMIN });
 
     socket.on("admin_users", (users) => {
 
@@ -61,20 +61,24 @@
       ul.innerHTML = "";
 
       users.forEach(user => {
-        if (user.type != TYPE) {
+        if (user.type != ADMIN) {
           let is_voted = '';
           for (const [key, value] of Object.entries(user.is_voted)) {
             is_voted += `<b>${key}</b>: <i>${value}</i>, `;
           }
+          // ul.innerHTML += `<li class="list-group-item" > <i class="fas fa-user ${user.online ? "c-green" : "c-red" }"></i> ${user.name} [${user.email}]</li>`;
 
-          ul.innerHTML += `<li class="list-group-item" > <i class="fas fa-user c-green"></i> ${user.name} [${user.email}]</li>`;
+          if (user.online) {
+            ul.innerHTML += `<li class="list-group-item" > <i class="fas fa-user c-green"></i> ${user.name} [${user.email}]</li>`;
+          }
+
+
         }
       });
 
     });
 
     socket.on("admin_perguntas", (questions) => {
-
 
       // console.table( questions );
 
@@ -99,23 +103,40 @@
                             </div>
                             <p class="mb-1"><b>Opções</b>: ${opt}</p>
                             <p class="mb-1"><b>Respostas</b>: [${votes}]</p>
-                            <p class="mb-1"><button class="btn btn-sm btn-primary" data-pergunta="${quest.id}" style="display: ${display};" >Enviar pergunta</button></p>
+                            <p class="mb-1">
+                              <button class="btn btn-sm btn-primary" data-pergunta="${quest.id}" style="display: ${display};" >Enviar</button>
+                          
+                              <button class="btn btn-sm btn-danger float-right" data-pergunta="${quest.id}" >Excluir</button>
+                            </p>
                           </div>`;
+
 
       });
 
-      document.querySelectorAll('div > p > button').forEach(bt => {
-        // console.log(bt);
+      document.querySelectorAll("div > p > button.btn.btn-sm.btn-primary").forEach(bt => {
+        bt.addEventListener('click', (evt) => {
+          evt.preventDefault();
+          let qId = evt.target.getAttribute("data-pergunta");
+          socket.emit('enviar_pergunta', qId);
+          evt.target.style.display = 'none';
+        });
+      });
+
+
+      document.querySelectorAll("div > p > button.btn.btn-sm.btn-danger").forEach(bt => {
         bt.addEventListener('click', (evt) => {
           evt.preventDefault();
 
-          let qId = evt.target.getAttribute("data-pergunta");
-          // console.log(qId);
-          socket.emit('enviar_pergunta', qId);
-          evt.target.style.display = 'none';
-
+          bootbox.confirm("Deseja realmente excluir essa pergunta?", (confirm) => {
+            if (confirm) {
+              let qId = evt.target.getAttribute("data-pergunta");
+              socket.emit('admin_excluir_pergunta', qId);
+              //evt.target.style.display = 'none';
+            }
+          });
         });
       });
+
 
     });
 
@@ -126,13 +147,13 @@
       ul.innerHTML = "";
 
       users.forEach(user => {
-        if (user.type != TYPE) {
+        if (user.type != ADMIN) {
           ul.innerHTML += `<li class="list-group-item" > <i class="fas fa-smile c-green"></i> ${user.name}</li>`;
         }
       });
     });
 
-    socket.on('admin_sortudos_finalizou', ()=>{
+    socket.on('admin_sortudos_finalizou', () => {
       bootbox.alert("Todos já foram sorteados.");
     });
 
@@ -146,7 +167,14 @@
 
     document.querySelector('button#btSortear').addEventListener('click', evt => {
       evt.preventDefault();
-      socket.emit("admin_sortear");
+      bootbox.prompt({
+        title: 'Quantos?',
+        inputType: 'number',
+        value: 1,
+        callback: (n) => {
+          socket.emit("admin_sortear", n);
+        }
+      });
     });
 
 
@@ -163,16 +191,11 @@
             let qtext = text.split('\n');
             let options = [];
             for (let i = 1; i < qtext.length; i++) {
-              options.push({ "i": qtext[i] });
+              let qtext_ = qtext[i].trim();
+              if(qtext_)
+                options.push({ "i": qtext_ });
             }
-            socket.emit('admin_nova_pergunta', {
-              // "id": -1, 
-              // "status": false,
-              "q": qtext[0],
-               options,
-              // "votes": {}, 
-              // "users": []
-            });
+            socket.emit('admin_nova_pergunta', { "q": qtext[0], options});
           }
         }
 
@@ -180,20 +203,6 @@
 
 
     });
-
-
-    // socket.on("user_resp", votes => {
-
-    //   let ul = document.querySelector("#respostas");
-    //   ul.innerHTML = '';
-
-    //   for (const [key, value] of Object.entries(votes)) {
-    //     // console.log(`${key}: ${value}`);
-    //     ul.innerHTML += `<li>${key}: ${value}</li>`;
-    //   }
-
-    // });
-
 
   </script>
 

@@ -48,7 +48,6 @@
   <script>
 
     let output = document.querySelector("#output");
-    // let botoes = document.querySelector("#botoes");
 
     // Get username and room from URL
     const { nome, email } = Qs.parse(location.search, {
@@ -60,69 +59,19 @@
     socket.emit('login', { nome, email, type: 'user' });
 
 
-    let questions = [];
+    // let questions = [];
 
     socket.on('user_prev_perguntas', prevQuestions => {
-
       output.innerHTML = '';
-
-      questions = prevQuestions;
-      console.table(prevQuestions);
-
       prevQuestions.forEach(q => {
-        let li = document.createElement('li');
-        li.classList.add('list-group-item');
-
-        let opt = "";
-        q.options.forEach(o => {
-          opt += `<button class="btn btn-sm btn-danger" data-pergunta="${q.id}" >${o.i}</button> `;
-        });
-        li.innerHTML = `${q.q} <br> ${opt}`;
-
-        output.appendChild(li);
-
-        document.querySelectorAll(`button[data-pergunta="${q.id}"]`).forEach(el => {
-          el.addEventListener('click', evt => {
-            evt.preventDefault();
-            let text = evt.target.innerText;
-            let qId = evt.target.getAttribute('data-pergunta');
-            socket.emit("resp", text, qId);
-            el.closest('li').remove();
-            console.log(qId);
-          });
-        });
-
+        createItemQuestion(q);
       });
 
     });
 
 
-    socket.on('user_pergunta', (messageObj) => {
-
-      // output.innerHTML = '';
-
-      let li = document.createElement('li');
-      li.classList.add('list-group-item');
-
-      let opt = "";
-      messageObj.options.forEach(q => {
-        opt += `<button class="btn btn-sm btn-danger" data-pergunta="${messageObj.id}" >${q.i}</button> `;
-      });
-      li.innerHTML = `${messageObj.q} <br> ${opt}`;
-      output.appendChild(li);
-
-      document.querySelectorAll(`button[data-pergunta="${messageObj.id}"]`).forEach(el => {
-        el.addEventListener('click', evt => {
-          evt.preventDefault();
-          let text = evt.target.innerText;
-          let qId = evt.target.getAttribute('data-pergunta');
-          socket.emit("resp", text, qId);
-          el.closest('li').remove();
-        });
-      });
-
-      // window.location.reload();
-
+    socket.on('user_pergunta', (q) => {
+      createItemQuestion(q);
     });
 
     socket.on('user_reabrir_enquete', () => {
@@ -146,6 +95,29 @@
     socket.on('error_login', () => {
       window.location = '/';
     });
+
+
+    function createItemQuestion(q){
+        let li = document.createElement('li');
+        li.classList.add('list-group-item');
+
+        let opt = "";
+        q.options.forEach(o => {
+          opt += `<button class="btn btn-sm btn-danger" data-pergunta="${q.id}" >${o.i}</button> `;
+        });
+        li.innerHTML = `${q.q} <br> ${opt}`;
+        output.appendChild(li);
+
+        document.querySelectorAll(`button[data-pergunta="${q.id}"]`).forEach(el => {
+          el.addEventListener('click', evt => {
+            evt.preventDefault();
+            let text = evt.target.innerText;
+            let qId = evt.target.getAttribute('data-pergunta');
+            socket.emit("user_resp", text, qId);
+            el.closest('li').remove();
+          });
+        });
+    }
 
 
   </script>

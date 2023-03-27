@@ -62,7 +62,7 @@ function remove(id) {
 // private helper functions
 
 function saveData() {
-    console.log("==>>",fileName, 'called');
+    // console.log("==>>",fileName, 'called');
     fs.writeFileSync(fileName, JSON.stringify(questions, null, 1));
 
     
@@ -71,5 +71,5 @@ function saveData() {
     //     console.log("=..=", fileName, 'updated');
     // });
 
-    console.log("=..=", fileName, 'updated');
+    // console.log("=..=", fileName, 'updated');
 }

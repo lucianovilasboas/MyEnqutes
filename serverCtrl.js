@@ -12,33 +12,22 @@ module.exports = function (server) {
     // });    
 
     const questionsRepo = require('./questions');
-
-    // var questions = questionsRepo.getAll();
-
-    var users = [];
-
-    // var users_questions = {};
-
-    var users_sortudos = [];
-
-    var i = 1;
+    const usersRepo = require('./users');
 
     io.on('connection', function (socket) {
         socket.on('login', ({ nome, email, type }) => {
 
             let user = userJoin(socket.id, nome, email, type);
 
-            // console.debug(user['email']);
+            // console.debug("DEBUG", user);
             // console.debug(` => ${users.length} user(s) connected.`);
             // console.log("cookie:",socket.request.headers.cookie);
 
             if (user['email']) {
 
-                io.emit('admin_users', users);
+                io.emit('admin_users', usersRepo.getAll());
                 io.emit('admin_perguntas', questionsRepo.getAll());
-                io.emit('admin_sortudos', users_sortudos);
-
-
+                io.emit('admin_sortudos', usersRepo.sortudos());
 
 
                 if (questionsRepo.getByStatus(true)) {
@@ -46,22 +35,24 @@ module.exports = function (server) {
                 }
 
                 socket.on('enviar_pergunta', qId => {
-                    io.emit('admin_users', users);
+                    io.emit('admin_users', usersRepo.getAll());
                     let q = questionsRepo.getById(qId);
                     questionsRepo.updateOne(q, "status", true);
-                    console.log("<<== update finish.");
+
+                    // console.log("<<== update finish.");
+
                     io.emit('user_pergunta', q);
                     io.emit('admin_perguntas', questionsRepo.getAll());
                 });
 
 
-                socket.on('resp', (res, qId) => {
-                    let user = currentUser(socket.id);
+                socket.on('user_resp', (res, qId) => {
+                    let user = usersRepo.getById(socket.id);
                     let q = questionsRepo.getById(qId);
 
                     q["users"].push(user.email);
                     questionsRepo.updateOne(qId, "users", q["users"]);
-                    console.log("<<== update finish.");
+                    // console.log("<<== update finish.");
 
                     if (!q["votes"][res])
                         q["votes"][res] = 1
@@ -69,36 +60,46 @@ module.exports = function (server) {
                         q["votes"][res] += 1
 
                     questionsRepo.updateOne(qId, "votes", q["votes"]);
-                    console.log("<<== update finish.");
-                    io.emit('admin_users', users);
+                    // console.log("<<== update finish.");
+                    io.emit('admin_users', usersRepo.getAll());
                     io.emit('admin_perguntas', questionsRepo.getAll());
 
                 });
 
                 socket.on("admin_reabrir_enquete", () => {
                     questionsRepo.updateAll();
-                    console.log("<<== update finish.");
-                    users_sortudos = [];
+                    usersRepo.clearAll();
                     io.emit('admin_perguntas', questionsRepo.getAll());
                     io.emit('user_reabrir_enquete');
-                    io.emit('admin_sortudos', users_sortudos);
+                    io.emit('admin_sortudos', usersRepo.sortudos());
                 });
 
-                socket.on('admin_sortear', () => {
-                    user = userSortear();
-                    if (user) {
-                        console.log(user);
-                        // io.sockets.socket(user.id).emit("user_sortudo", user);
-                        io.emit("user_sortudo", user);
-                        users_sortudos.push(user);
-                        socket.emit('admin_sortudos', users_sortudos);
-                    }else{
-                        socket.emit('admin_sortudos_finalizou');
+                socket.on('admin_sortear', (n) => {
+                    n = Math.min(usersRepo.getAll().length, parseInt(n));
+                    for (let i = 0; i < n; i++) {
+                        user = usersRepo.random();
+                        if (user) {
+                            // console.log(user);
+                            // io.sockets.socket(user.id).emit("user_sortudo", user);
+                            io.emit("user_sortudo", user);
+                            socket.emit('admin_sortudos', usersRepo.sortudos());
+                            
+                            usersRepo.updateOne(user, "is_sort", true);
+                            
+                        } else {
+                            socket.emit('admin_sortudos_finalizou');
+                            break;
+                        }
                     }
                 });
 
                 socket.on('admin_nova_pergunta', qnew => {
                     questionsRepo.create(qnew);
+                    io.emit('admin_perguntas', questionsRepo.getAll());
+                });
+
+                socket.on('admin_excluir_pergunta', qId => {
+                    questionsRepo.remove(qId);
                     io.emit('admin_perguntas', questionsRepo.getAll());
                 });
 
@@ -109,77 +110,34 @@ module.exports = function (server) {
         });
 
         socket.on('disconnect', () => {
-
-            removeUser(socket.id);
-
-            // console.debug(` <= ${users.length} user(s) connected.`);
-
-            // socket.broadcast.emit('admin', users);
-            io.emit('admin_users', users);
+            let user = usersRepo.getById(socket.id);
+            // console.log("disconnect", user);
+            if (user) {
+                usersRepo.updateOne(user, "online", false);
+            }
+            io.emit('admin_users', usersRepo.getAll());
         });
 
     });
 
 
+
+
+
+
+
     // User Ctrl
 
     function userJoin(id, nome, email, type) {
-
-        let user = { "id": id, "name": nome, "email": email, "type": type, "is_voted": {}, 'is_sort': false };
-        if (type != ADMIN) {
-            users.push(user);
+        let user = usersRepo.getByEmail(email);
+        if (user) {
+            usersRepo.updateOne(user, "id", id);
+            usersRepo.updateOne(user, "online", true);
+        } else {
+            user = { "id": id, "name": nome, "email": email, "type": type, "is_voted": {}, 'is_sort': false, "online": true };
+            usersRepo.create(user);
         }
-
         return user;
-    }
-
-    function removeUser(id) {
-        const index = users.findIndex(user => user.id === id);
-
-        // console.log("removendo:",users[index]);
-
-        if (index !== -1) {
-            users.splice(index, 1)[0];
-        }
-    }
-
-    function currentUser(id) {
-        return users.find(user => user.id === id);
-    }
-
-    function userSortear() {
-
-        let usersCopy = [];
-
-        for (i = 0; i < users.length; i++) {
-            if (users[i].type != ADMIN && !users[i].is_sort)
-                usersCopy.push(users[i]);
-        }
-
-        if (usersCopy.length > 0) {
-            let randomIndex = parseInt(Math.random() * usersCopy.length);
-            usersCopy[randomIndex].is_sort = true;
-            return usersCopy[randomIndex];
-        }
-        return null;
-    }
-
-    // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-    function shuffle(array) {
-        let currentIndex = array.length, randomIndex;
-
-        // While there remain elements to shuffle.
-        while (currentIndex != 0) {
-
-            // Pick a remaining element.
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-
-            // And swap it with the current element.
-            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-        }
-
-        return array;
     }
 
 };
