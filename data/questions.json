@@ -27,49 +27,10 @@
     "i": "opcao2"
    },
    {
-    "i": "..."
-   }
-  ],
-  "id": 7,
-  "status": false,
-  "votes": {},
-  "users": []
- },
- {
-  "q": "Pergunta",
-  "options": [
-   {
-    "i": "opcao1"
-   },
-   {
-    "i": "opcao2"
-   },
-   {
     "i": "opcao3"
    }
   ],
   "id": 8,
-  "status": false,
-  "votes": {},
-  "users": []
- },
- {
-  "q": "Pergunta",
-  "options": [
-   {
-    "i": "opcao1"
-   },
-   {
-    "i": "opcao2"
-   },
-   {
-    "i": "..."
-   },
-   {
-    "i": "opcao"
-   }
-  ],
-  "id": 9,
   "status": false,
   "votes": {},
   "users": []

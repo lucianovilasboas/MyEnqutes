@@ -12,8 +12,10 @@ module.exports = {
     updateOne,
     clearAll,
     remove,
+    removeByEmail,
     random,
-    sortudos
+    sortudos,
+    shuffle
 }
 
 
@@ -45,6 +47,13 @@ function updateOne(user, keyValueMap, callback) {
 function remove(id, callback) {
     if (id) {
         users = users.filter(x => x.id.toString() !== id.toString());
+        saveData(callback);
+    }
+}
+
+function removeByEmail(email, callback){
+    if (email) {
+        users = users.filter(x => x.email.toString() !== email.toString());
         saveData(callback);
     }
 

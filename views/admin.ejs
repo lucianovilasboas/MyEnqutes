@@ -32,6 +32,7 @@
           <button id="btNovaEnquete" class="btn btn-sm btn-success">Nova pergunta</button>
           <button id="btReabrirEnquete" class="btn btn-sm btn-danger">Reabrir enquete</button>
           <button id="btSortear" class="btn btn-sm btn-primary">Sortear Figurinha</button>
+          <button id="btGrupos" class="btn btn-sm btn-warning">Formar grupos</button>
         </div>
       </div>
     </div>
@@ -53,6 +54,23 @@
       <div class="col-12">
         <h5>Usuários sorteados</h5>
         <ul class="list-group" id="usersSortudos"></ul>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-12">
+        <h5>Grupos</h5>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Grupo</th>
+              <th>Alunos</th>
+            </tr>
+          </thead>
+          <tbody id="usersGrupos">
+          </tbody>
+        </table>
+
       </div>
     </div>
 
@@ -82,13 +100,29 @@
           // ul.innerHTML += `<li class="list-group-item" > <i class="fas fa-user ${user.online ? "c-green" : "c-red" }"></i> ${user.name} [${user.email}]</li>`;
 
           if (user.online) {
-            let figurinha =  user.is_sort ? '<i class="fas fa-smile c-green"></i>' : '';
-            ul.innerHTML += `<li class="list-group-item" > <i class="fas fa-user c-green"></i> ${user.name} [${user.email}] ${figurinha}</li>`;
+            let figurinha = user.is_sort ? '<i class="fas fa-smile c-green"></i>' : '';
+            ul.innerHTML += `<li class="list-group-item" > 
+               <i class="fas fa-user c-green"></i> ${user.name} [${user.email}] ${figurinha}
+               <button class="btn btn-sm btn-danger float-right" data-useremail="${user.email}" ><i class="fas fa-sign-out-alt"></i></button>
+              </li>`;
           }
 
 
         }
       });
+
+      document.querySelectorAll("li > button[data-useremail]").forEach(bt => {
+        bt.addEventListener('click', (evt) => {
+          evt.preventDefault();
+          let userEmail = bt.getAttribute("data-useremail");
+          bootbox.confirm("Deseja realmente desconectar " + userEmail + "?", (confirm) => {
+            if (confirm) {
+              socket.emit('admin_excluir_user', userEmail);
+            }
+          });
+        });
+      });
+
 
     });
 
@@ -154,8 +188,8 @@
     });
 
     socket.on('admin_sortudos', users => {
-      console.clear();
-      console.table(users.map(u => u.name));
+      // console.clear();
+      // console.table(users.map(u => u.name));
       let ul = document.querySelector("#usersSortudos");
       ul.innerHTML = "";
 
@@ -168,6 +202,20 @@
 
     socket.on('admin_sortudos_finalizou', () => {
       bootbox.alert("Todos já foram sorteados.");
+    });
+
+
+    socket.on('admin_grupos', (grupos) => {
+      // console.table(grupos);
+      // aqui
+      let tbody = document.querySelector("#usersGrupos");
+      tbody.innerHTML = "";
+
+      for (let i = 0; i < grupos.length; i++) {
+        let grupoNames = grupos[i].map(u => u.name).join(', ');
+        tbody.innerHTML += `<tr><td>${i+1}</td> <td> <i class="fas fa-users c-green"></i> ${grupoNames}</td></tr>`;
+      }
+
     });
 
     document.querySelector('button#btReabrirEnquete').addEventListener('click', evt => {
@@ -213,9 +261,23 @@
         }
 
       });
-
-
     });
+
+    document.querySelector('button#btGrupos').addEventListener('click', evt => {
+      evt.preventDefault();
+      bootbox.prompt({
+        title: 'Quantos membros em cada grupo?',
+        inputType: 'number',
+        value: 3,
+        callback: (n) => {
+          if (n) {
+            console.log(n);
+            socket.emit("admin_formar_grupos", n);
+          }
+        }
+      });
+    });
+
 
   </script>
 

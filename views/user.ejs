@@ -23,7 +23,7 @@
   <div class="container">
     <h1>
       <%= title %>
-      <button id="sair" class="btn btn-sm btn-danger float-right">Sair</button>
+        <button id="sair" class="btn btn-sm btn-danger float-right">Sair</button>
     </h1>
 
     <p>Olá <strong>
@@ -84,23 +84,28 @@
       window.location.reload();
     });
 
-    socket.on('user_sortudo', user => {
-      if (socket.id === user.id) {
+    socket.on('user_sortudo', () => {
         // document.querySelector("div#sorteado").innerHTML = `<i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
         //                                                     <i class="fas fa-smile fa-3x c-green"></i>
         //                                                     Parabéns!!!`;
-
-
         let msg = `<div class="text-center"><i class="fas fa-smile fa-5x c-green"></i><p>Parabéns!!! Você ganhou uma Figurinha.</p></div>`;
-
         document.querySelector("div#sorteado").innerHTML = msg;
         bootbox.alert(msg);
-      }
     })
 
     socket.on('error_login', () => {
       window.location = '/';
     });
+
+
+    socket.on('force_disconnect', () => {
+        window.location = '/';
+    });
+
+    socket.on('user_grupo', g => {
+      bootbox.alert("Vc está no grupo "+g);
+    });
+
 
 
     function createItemQuestion(q) {
@@ -126,8 +131,8 @@
     }
 
     document.querySelector("button#sair").addEventListener('click', (evt) => {
-       evt.preventDefault();
-       socket.emit('logout'); 
+      evt.preventDefault();
+      socket.emit('logout');
     });
 
 

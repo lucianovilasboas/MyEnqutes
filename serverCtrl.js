@@ -85,7 +85,9 @@ module.exports = function (server) {
                             usersRepo.updateOne(user, { "is_sort": true }, () => {
                                 console.warn(`==>>admin_sortear[${i}]`,);
                             });
-                            io.emit("user_sortudo", user);
+                            
+                            io.to(user.id).emit("user_sortudo");
+
                             socket.emit('admin_sortudos', usersRepo.sortudos());
                             socket.emit('admin_users', usersRepo.getAll());
 
@@ -109,6 +111,52 @@ module.exports = function (server) {
                         io.emit('admin_perguntas', questionsRepo.getAll());
                         console.log('====> admin_excluir_pergunta', qId);
                     });
+                });
+
+                socket.on('admin_excluir_user', email => {
+                    const user = usersRepo.getByEmail(email);
+                    usersRepo.remove(user.id, () => {
+                        socket.emit('admin_users', usersRepo.getAll());
+                        // io.emit('force_disconnect', user);
+                        io.to(user.id).emit('force_disconnect');
+                    });
+                });
+
+
+                socket.on('admin_formar_grupos', n => {
+                    let usuariosCopy  = []; 
+                    const usuarios = usersRepo.getAll();
+                    for (let i = 0; i < usuarios.length; i++) {
+                        if(usuarios[i].type != ADMIN)
+                            usuariosCopy.push(usuarios[i]);
+                        
+                    }
+
+                    usuariosCopy = usersRepo.shuffle(usuariosCopy);
+
+                    const x = Math.round(usuariosCopy.length / n);
+                    // console.info(usuariosCopy.length,n, x);
+
+                    let grupos = []
+                    while(usuariosCopy.length > 0){
+                        let g = usuariosCopy.splice(0,x); // .map(u=>u.name);
+                        grupos.push(g);
+                    }
+
+                    // console.log("grupos:", grupos);
+                    // console.log("usuarios:",usuariosCopy);
+
+                    socket.emit('admin_grupos', grupos);
+
+                    for (let i = 0; i < grupos.length; i++) {
+                        for (const u of grupos[i]) {
+                            io.to(u.id).emit('user_grupo', (i+1));
+                        }
+                    }
+
+
+
+
                 });
 
             } else {
