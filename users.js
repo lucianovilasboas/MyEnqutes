@@ -17,36 +17,35 @@ module.exports = {
 }
 
 
-function create(user) {
-    // add and save task
+function create(user, callback) {
     users.push(user);
-    saveData();
+    saveData(callback);
 
     return user.id;
 }
 
-function clearAll() {
+function clearAll(callback) {
     users.forEach(u => {
         u.is_sort = false;
     });
-    saveData();
+    saveData(callback);
 }
 
 
 
-function updateOne(user, keyValueMap) {
+function updateOne(user, keyValueMap, callback) {
     if (user) {
         for (const [key, value] of Object.entries(keyValueMap)) {
             user[key] = value;
         }
-        saveData();
+        saveData(callback);
     }
 }
 
-function remove(id) {
+function remove(id, callback) {
     if (id) {
         users = users.filter(x => x.id.toString() !== id.toString());
-        saveData();
+        saveData(callback);
     }
 
 }
@@ -98,12 +97,12 @@ function shuffle(array) {
 
 
 // private helper functions
-function saveData() {
-    try {
-        fs.writeFileSync(fileName, JSON.stringify(users, null, 1));
-    }
-    catch (err) {
-        console.log(err);
-    }
+function saveData(callback) {
+
+    fs.writeFile(fileName, JSON.stringify(users, null, 1), (err) => {
+        if (err) throw err;
+
+        callback();
+    });    
 
 }

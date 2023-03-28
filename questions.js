@@ -18,7 +18,7 @@ function getByStatus(status) {
     return questions.filter(q => q.status == status).length > 0;
 }
 
-function create(q) {
+function create(q, callback) {
     // generate new task id
     q.id = questions.length ? Math.max(...questions.map(x => x.id)) + 1 : 1;
     q.status = false;
@@ -27,36 +27,36 @@ function create(q) {
 
     // add and save task
     questions.push(q);
-    saveData();
+    saveData(callback);
 
     return q.id;
 }
 
-function updateAll() {
+function updateAll(callback) {
     questions.forEach(q => {
         q.status = false;
         q.users = [];
         q.votes = {};
     });
-    saveData();
+    saveData(callback);
 }
 
 
 
-function updateOne(q, prop, value) {
+function updateOne(q, prop, value, callback) {
     // set date updated
     // q.dateUpdated = new Date().toISOString();
     if (q) {
         q[prop] = value;
-        saveData();
+        saveData(callback);
     }
 }
 
-function remove(id) {
+function remove(id, callback) {
     // filter out deleted task and save
     if (id) {
         questions = questions.filter(x => x.id.toString() !== id.toString());
-        saveData();
+        saveData(callback);
     }
 
 }
@@ -64,20 +64,20 @@ function remove(id) {
 
 // private helper functions
 
-function saveData() {
+function saveData(callback) {
 
-    try {
-        fs.writeFileSync(fileName, JSON.stringify(questions, null, 1));
-    }
-    catch (err) {
-        console.log(err);
-    }
+    // try {
+    //     fs.writeFileSync(fileName, JSON.stringify(questions, null, 1));
+    // }
+    // catch (err) {
+    //     console.log(err);
+    // }
 
 
-    // fs.writeFile(fileName, JSON.stringify(questions, null, 1), (err) => {
-    //     if (err) throw err;
-    //     console.log("=..=", fileName, 'updated');
-    // });
+    fs.writeFile(fileName, JSON.stringify(questions, null, 1), (err) => {
+        if (err) throw err;
+        callback();
+    });
 
     // console.log("=..=", fileName, 'updated');
 }

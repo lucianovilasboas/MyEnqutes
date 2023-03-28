@@ -118,9 +118,8 @@
                             <p class="mb-1"><b>Opções</b>: ${opt}</p>
                             <p class="mb-1"><b>Respostas</b>: [${votes}]</p>
                             <p class="mb-1">
-                              <button class="btn btn-sm btn-primary" data-pergunta="${quest.id}" style="display: ${display};" >Enviar </button>
-                          
-                              <button class="btn btn-sm btn-danger float-right" data-pergunta="${quest.id}" ><i class="fas fa-trash" aria-hidden="true"></i></button>
+                              <button class="btn btn-sm btn-primary" data-pergunta="${quest.id}" style="display: ${display};" ><i class="fas fa-users"></i> </button>
+                              <button class="btn btn-sm btn-danger float-right" data-pergunta="${quest.id}" ><i class="fas fa-trash"></i></button>
                             </p>
                           </div>`;
 
@@ -130,20 +129,20 @@
       document.querySelectorAll("div > p > button.btn.btn-sm.btn-primary").forEach(bt => {
         bt.addEventListener('click', (evt) => {
           evt.preventDefault();
-          let qId = evt.target.getAttribute("data-pergunta");
+          let qId = bt.getAttribute("data-pergunta");
           socket.emit('enviar_pergunta', qId);
           evt.target.style.display = 'none';
         });
       });
 
 
-      document.querySelectorAll("div > p > button.btn.btn-sm.btn-danger").forEach(bt => {
+      document.querySelectorAll("div > p > button.btn.btn-sm.btn-danger.float-right").forEach(bt => {
         bt.addEventListener('click', (evt) => {
           evt.preventDefault();
-
+          let qId = bt.getAttribute("data-pergunta");
+          console.log(qId);
           bootbox.confirm("Deseja realmente excluir essa pergunta?", (confirm) => {
             if (confirm) {
-              let qId = evt.target.getAttribute("data-pergunta");
               socket.emit('admin_excluir_pergunta', qId);
               //evt.target.style.display = 'none';
             }

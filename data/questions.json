@@ -1,28 +1,5 @@
 [
  {
-  "id": 2,
-  "status": true,
-  "q": "Qual a sua cor favorita?",
-  "options": [
-   {
-    "i": "vermelho"
-   },
-   {
-    "i": "verde"
-   },
-   {
-    "i": "azul"
-   }
-  ],
-  "votes": {
-   "vermelho": 2
-  },
-  "users": [
-   "bernardo.espiridiao@gmail.com",
-   "isabella.espiridiao@gmail.com"
-  ]
- },
- {
   "q": "Qual a cor do cavalo branco de Napoleão?",
   "options": [
    {
@@ -36,14 +13,27 @@
    }
   ],
   "id": 3,
-  "status": true,
-  "votes": {
-   "Verde": 2
-  },
-  "users": [
-   "bernardo.espiridiao@gmail.com",
-   "isabella.espiridiao@gmail.com"
-  ]
+  "status": false,
+  "votes": {},
+  "users": []
+ },
+ {
+  "q": "Pergunta",
+  "options": [
+   {
+    "i": "opcao1"
+   },
+   {
+    "i": "opcao2"
+   },
+   {
+    "i": "..."
+   }
+  ],
+  "id": 7,
+  "status": false,
+  "votes": {},
+  "users": []
  },
  {
   "q": "Pergunta",
@@ -58,36 +48,30 @@
     "i": "opcao3"
    }
   ],
-  "id": 4,
-  "status": true,
-  "votes": {
-   "opcao1": 1,
-   "opcao2": 1
-  },
-  "users": [
-   "bernardo.espiridiao@gmail.com",
-   "isabella.espiridiao@gmail.com"
-  ]
+  "id": 8,
+  "status": false,
+  "votes": {},
+  "users": []
  },
  {
-  "q": "Vc está prestando atenção?",
+  "q": "Pergunta",
   "options": [
    {
-    "i": "Sim"
+    "i": "opcao1"
    },
    {
-    "i": "Não"
+    "i": "opcao2"
+   },
+   {
+    "i": "..."
+   },
+   {
+    "i": "opcao"
    }
   ],
-  "id": 5,
-  "status": true,
-  "votes": {
-   "Não": 1,
-   "Sim": 1
-  },
-  "users": [
-   "bernardo.espiridiao@gmail.com",
-   "isabella.espiridiao@gmail.com"
-  ]
+  "id": 9,
+  "status": false,
+  "votes": {},
+  "users": []
  }
 ]
