@@ -106,10 +106,10 @@ module.exports = function (server) {
                 });
 
                 socket.on('admin_excluir_pergunta', qId => {
-                    console.log('==> admin_excluir_pergunta', qId);
+                    // console.log('==> admin_excluir_pergunta', qId);
                     questionsRepo.remove(qId, () => {
                         io.emit('admin_perguntas', questionsRepo.getAll());
-                        console.log('====> admin_excluir_pergunta', qId);
+                        // console.log('====> admin_excluir_pergunta', qId);
                     });
                 });
 
@@ -134,7 +134,7 @@ module.exports = function (server) {
 
                     usuariosCopy = usersRepo.shuffle(usuariosCopy);
 
-                    const x = Math.round(usuariosCopy.length / n);
+                    const x = Math.floor(usuariosCopy.length / n);
                     // console.info(usuariosCopy.length,n, x);
 
                     let grupos = []
@@ -143,8 +143,15 @@ module.exports = function (server) {
                         grupos.push(g);
                     }
 
-                    // console.log("grupos:", grupos);
-                    // console.log("usuarios:",usuariosCopy);
+                    // console.log("grupos1:", grupos.map(g => g.length));
+
+                    if(grupos[grupos.length-1].length == 1){
+                        grupos[grupos.length-2].push( grupos[grupos.length-1].pop() );
+                        grupos.splice(grupos.length-1,1);
+                    }
+
+                    // console.log("grupos2:", grupos.map(g => g.length));
+
 
                     socket.emit('admin_grupos', grupos);
 
@@ -201,14 +208,10 @@ module.exports = function (server) {
         let user = usersRepo.getByEmail(email);
         if (user) {
             // usersRepo.updateOne(user, "id", id);
-            usersRepo.updateOne(user, { "id": id, "online": true }, () => {
-                // console.log("userJoin -> update", user); 
-            });
+            usersRepo.updateOne(user, { "id": id, "online": true } );
         } else {
             user = { "id": id, "name": nome, "email": email, "type": type, "is_voted": {}, 'is_sort': false, "online": true };
-            usersRepo.create(user, () => {
-                // console.log("userJoin -> create", user); 
-            });
+            usersRepo.create(user);
         }
         return user;
     }

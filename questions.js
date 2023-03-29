@@ -65,7 +65,6 @@ function remove(id, callback) {
 // private helper functions
 
 function saveData(callback) {
-
     // try {
     //     fs.writeFileSync(fileName, JSON.stringify(questions, null, 1));
     // }
@@ -76,7 +75,8 @@ function saveData(callback) {
 
     fs.writeFile(fileName, JSON.stringify(questions, null, 1), (err) => {
         if (err) throw err;
-        callback();
+
+        if (callback) callback();
     });
 
     // console.log("=..=", fileName, 'updated');

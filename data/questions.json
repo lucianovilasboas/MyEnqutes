@@ -13,25 +13,25 @@
    }
   ],
   "id": 3,
-  "status": false,
+  "status": true,
   "votes": {},
   "users": []
  },
  {
-  "q": "Pergunta",
+  "q": "Qual o seu time?",
   "options": [
    {
-    "i": "opcao1"
+    "i": "Atlético"
    },
    {
-    "i": "opcao2"
+    "i": "América"
    },
    {
-    "i": "opcao3"
+    "i": "Cruzeiro"
    }
   ],
-  "id": 8,
-  "status": false,
+  "id": 4,
+  "status": true,
   "votes": {},
   "users": []
  }

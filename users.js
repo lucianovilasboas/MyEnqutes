@@ -107,11 +107,13 @@ function shuffle(array) {
 
 // private helper functions
 function saveData(callback) {
+    
+    console.log(" >>> callback: ", callback);
 
     fs.writeFile(fileName, JSON.stringify(users, null, 1), (err) => {
         if (err) throw err;
 
-        callback();
+        if (callback) callback();
     });    
 
 }
